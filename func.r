@@ -1,5 +1,3 @@
-##Two ways to get data from Google Spreadsheets
-
 google_ss <- function(key = NA, gid=0) {
   # This doesn't allow querying the spreadsheet, but seems to handle
   # mixed datatype columns better than getGoogleSS
@@ -27,9 +25,8 @@ getGoogleSS <- function(ssKey,query="",gid=0) {
 
 ###############################################################################
 
-## Convert degrees minutes seconds to decimal degrees:
-
 dms_dd <- function(x, sep=":", hem) {
+  ## Convert degrees minutes seconds to decimal degrees:
   # x: a vector containing the lat or long with elements separated by single character
   # sep: the character separating the degrees, minutes, seconds (default ":")
   # hem: the hemisphere ("N","S","E","W").  Assumes all coords in the same hemisphere
@@ -48,8 +45,15 @@ dms_dd <- function(x, sep=":", hem) {
 
 ###############################################################################
 
-# Coerces data.frame columns to the specified classes
+
 colClasses <- function(d, colClasses) {
+  # Coerces data.frame columns to the specified classes
+  # Example usage
+  # DF <- as.data.frame(matrix(rnorm(25), 5, 5))
+  # DF2 <- colClasses(DF, c(rep("character", 3), rep("factor", 2)))
+  #
+  # DF3 <- colClasses(DF, 'Date')
+  # str(DF3)
   colClasses <- rep(colClasses, len=length(d))
   d[] <- lapply(seq_along(d)
                 , function(i) switch(colClasses[i], 
@@ -64,19 +68,12 @@ colClasses <- function(d, colClasses) {
   d
 }
 
-# Example usage
-# DF <- as.data.frame(matrix(rnorm(25), 5, 5))
-# DF2 <- colClasses(DF, c(rep("character", 3), rep("factor", 2)))
-#
-# DF3 <- colClasses(DF, 'Date')
-# str(DF3)
-## End colClasses
 
 ###############################################################################
 
-## plot shape codes for plotting in R:
-## Run with no parameters plotShapeCodes()
 plotShapeCodes <- function() {
+  ## plot shape codes for plotting in R:
+  ## Run with no parameters plotShapeCodes()
   library(ggplot2)
   myTitle <- "Guide to Point Shape codes in R
      (from http://www.win-vector.com/blog/2012/04/how-to-remember-point-shape-codes-in-r/)
@@ -89,3 +86,12 @@ plotShapeCodes <- function() {
   }
   sum
 }
+
+################################################################################
+
+## Colour-blind friendly palettes
+# The palette with grey:
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+# The palette with black:
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")

@@ -45,6 +45,32 @@ dms_dd <- function(x, sep=":", hem) {
 
 ###############################################################################
 
+utm_dd <- function(zones,easting,northing) {
+  ## Convert zone+utm pairs to lat/long
+  #
+  # Depends: rgdal
+  #
+  # zones = numeric (if all coordinates are in the same zone, or vector of 
+  #         zones the same length as coordinate pairs
+  # easting = numeric or vector of eastings
+  # nortings = numeric or vector of northings
+  #
+  # Returns: a dataframe with five columns: zones, easting, northing, 
+  #          Longitude, and Latitude
+  
+  d <- data.frame(zones,easting,northing,Longitude=NA,Latitude=NA)
+  require(rgdal)
+  for (zone in unique(zones)) {
+    utm <- SpatialPoints(d[d$zones==zone,c(2,3)], 
+                         proj4string=CRS(paste("+proj=utm +zone="
+                                               , zone, sep="")))
+    sp <- spTransform(utm, CRS("+proj=longlat"))  
+    d[d$zones==zone,c(4,5)] <- coordinates(sp)                     
+  }
+  d
+}
+
+###############################################################################
 
 colClasses <- function(d, colClasses) {
   # Coerces data.frame columns to the specified classes

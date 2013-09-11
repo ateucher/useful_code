@@ -25,14 +25,15 @@ utm_dd <- function(zones,easting,northing) {
   #
   # zones = numeric (if all coordinates are in the same zone, or vector of 
   #         zones the same length as coordinate pairs
-  # easting = numeric or vector of eastings
-  # nortings = numeric or vector of northings
+  # eastings = numeric or vector of eastings
+  # northings = numeric or vector of northings
   #
   # Returns: a dataframe with five columns: zones, easting, northing, 
   #          Longitude, and Latitude
   
-  d <- data.frame(zones,easting,northing,Longitude=NA,Latitude=NA)
   require(rgdal)
+
+  d <- data.frame(zones,easting,northing,Longitude=NA,Latitude=NA)
   for (zone in unique(zones)) {
     utm <- SpatialPoints(d[d$zones==zone,c(2,3)], 
                          proj4string=CRS(paste("+proj=utm +zone="

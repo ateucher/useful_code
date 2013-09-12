@@ -18,28 +18,31 @@ dms_dd <- function(x, sep=":", hem) {
 
 ###############################################################################
 
-utm_dd <- function(zones,easting,northing) {
-  ## Convert zone+utm pairs to lat/long
+utm_dd <- function(utms) {
+
+  ## Convert zone+utm pairs to lat/long.  Note, NOT vectorized!
   #
   # Depends: rgdal
   #
-  # zones = numeric (if all coordinates are in the same zone, or vector of 
-  #         zones the same length as coordinate pairs
-  # eastings = numeric or vector of eastings
-  # northings = numeric or vector of northings
+  # utms: a list of the form c(zone,easting,northing) OR
+  #       a one-row dataframe with 3 columns in the order zone, easting, northing
   #
   # Returns: a dataframe with five columns: zones, easting, northing, 
   #          Longitude, and Latitude
   
   require(rgdal)
 
-  d <- data.frame(zones,easting,northing,Longitude=NA,Latitude=NA)
-  for (zone in unique(zones)) {
-    utm <- SpatialPoints(d[d$zones==zone,c(2,3)], 
-                         proj4string=CRS(paste("+proj=utm +zone="
-                                               , zone, sep="")))
-    sp <- spTransform(utm, CRS("+proj=longlat"))  
-    d[d$zones==zone,c(4,5)] <- coordinates(sp)                     
+  if (class(utms) == "numeric") {
+    d <- data.frame(t(utms),Longitude=NA,Latitude=NA)
+  } else {
+    d <- data.frame(utms,Longitude=NA,Latitude=NA)
   }
+
+  names(d)[1:3] <- c("Zone", "Easting", "Northing")
+
+  utm <- SpatialPoints(d[2:3], proj4string=CRS(paste("+proj=utm +zone="
+                                               , d[1], sep="")))
+  sp <- spTransform(utm, CRS("+proj=longlat"))  
+  d[4:5] <- coordinates(sp)                     
   d
 }

@@ -1,4 +1,4 @@
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL, title=NULL) {
   # Multiple plot function
   #
   # ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
@@ -27,13 +27,22 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
                      ncol = cols, nrow = ceiling(numPlots/cols))
   }
   
+  if (!is.null(title)) { # Add a narrow row at the top for the title
+    layout <- rbind(rep(0,ncol(layout)),layout)
+    rowheights <- c(0.5, rep(5,nrow(layout)-1))
+  } else {
+    rowheights <- rep(5,nrow(layout))
+  }
+  
   if (numPlots==1) {
-    print(plots[[1]])
+    
+    print(plots[[1]] + labs(title=title))
     
   } else {
     # Set up the page
     grid.newpage()
-    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout), 
+                                               heights=unit(rowheights, "null"))))
     
     # Make each plot, in the correct location
     for (i in 1:numPlots) {
@@ -43,5 +52,11 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
       print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
                                       layout.pos.col = matchidx$col))
     }
+    
+    if (!is.null(title)) {
+      grid.text(title, vp = viewport(layout.pos.row = 1
+                                     , layout.pos.col = 1:ncol(layout)))
+    }
+    
   }
 }

@@ -1,9 +1,10 @@
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL, title=NULL) {
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL, title=NULL, colwidths=NULL) {
   # Multiple plot function
   #
   # ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
   # - cols:   Number of columns in layout
   # - layout: A matrix specifying the layout. If present, 'cols' is ignored.
+  # - colwidths: a vector of relative column widths eg. c(3,2)
   #
   # If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
   # then plot 1 will go in the upper left, 2 will go in the upper right, and
@@ -34,6 +35,13 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL, title=NULL)
     rowheights <- rep(5,nrow(layout))
   }
   
+  if (is.null(colwidths)) {
+    colwidths=unit(rep_len(1, cols), "null")
+    print(colwidths)
+  } else {
+    colwidths = colwidths / sum(colwidths)
+  }
+  
   if (numPlots==1) {
     
     print(plots[[1]] + labs(title=title))
@@ -42,6 +50,7 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL, title=NULL)
     # Set up the page
     grid.newpage()
     pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout), 
+                                               widths=colwidths, 
                                                heights=unit(rowheights, "null"))))
     
     # Make each plot, in the correct location

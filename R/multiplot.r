@@ -37,7 +37,6 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL, title=NULL,
   
   if (is.null(colwidths)) {
     colwidths=unit(rep_len(1, cols), "null")
-    print(colwidths)
   } else {
     colwidths = colwidths / sum(colwidths)
   }

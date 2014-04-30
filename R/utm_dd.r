@@ -53,6 +53,8 @@ utm_dd <- function(zone=NULL, easting=NULL, northing=NULL, datum="NAD83", data=N
       utms <- data[c(key,zone,easting,northing,datum)]
     }
     
+    utms <- na.omit(utms)
+    
     longlat <- ddply(.data=utms,.variables=1, .fun= function(x) get_dd(x[2:5]))
     names(longlat)[2:3] <- c("Longitude","Latitude")
     longlat

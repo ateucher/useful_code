@@ -3,6 +3,8 @@ title: Style guide
 layout: default
 ---
 
+This style guide was taken from [Hadley Wickham's](http://adv-r.had.co.nz/Style.html), with a few tweaks of my own added.  Not all of my work follows this (or any) style guide, especially my older stuff.
+
 # Style guide
 
 Good coding style is like using correct punctuation when writing: you can manage without it, but it sure makes things easier to read. As with punctuation, there are many possible variations, and the main thing is to be consistent. The following guide describes the style that I use - you don't have to use it, but you need to have some consistent style that you do follow.  My style is  based on Google's [R style guide][1], with a few tweaks.
@@ -28,16 +30,26 @@ File names should end in `.r` and be meaningful.
 
 "There are only two hard things in Computer Science: cache invalidation and naming things." -- Phil Karlton
 
-Variable and function names should be lowercase. Use `_` to separate words within a name. Generally, variable names should be nouns and function names should be verbs. Strive for concise but meaningful names (this is not easy!)
+Variable names should be lowercase and use `.` to separate words within a name.  Function names should be camelCase.  Column names in dataframes and matrices should be lowercase, with words within a name separated by `_`. Generally, variable names should be nouns and function names should be verbs. Strive for concise but meaningful names (this is not easy!)
 
+* Variable names:
     # Good
-    day_one
-    day_1
+    day.one
+    day.1
     # Bad
     first_day_of_the_month
     DayOne
     dayone
     djm1
+
+* Function names:
+    # Good
+    getStuff
+    getMoreStuff
+    writeStuff
+    # Bad
+    func1
+    func_3
 
 ## Syntax
 
@@ -149,5 +161,5 @@ Comment your code. Entire commented lines should begin with `#` and one space. C
 
 Use commented lines of `-` and `=` to break up your files into scannable chunks.
 
- [1]: http://google-styleguide.googlecode.com/svn/trunk/google-r-style.html
+ [1]: http://google-styleguide.googlecode.com/svn/trunk/Rguide.xml
 

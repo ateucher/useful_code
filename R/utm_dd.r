@@ -1,5 +1,4 @@
-utm_dd <- function(zone=NULL, easting=NULL, northing=NULL, datum="NAD83"
-                   , data=NULL, key=NULL) {
+utm_dd <- function(zone=NULL, easting=NULL, northing=NULL, datum="NAD83", data=NULL, key=NULL) {
 
   ## Convert zone+utm pairs to lat/long. Can take either a single zone + utm,
   ## or a data frame with many.  Allows for datasets with different zones and 

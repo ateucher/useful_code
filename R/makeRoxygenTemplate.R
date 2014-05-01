@@ -20,8 +20,8 @@ makeRoxygenTemplate <- function(funfile) {
   params_line <- fun_text[grep("function\\s*?\\(.+?\\)\\s*?\\{", fun_text)][1]
   
   # Parse out and clean the parameter names:
-  params <- strsplit(params_line, ",|.+?function\\s*\\(|\\s*\\)|\\s*\\{")[[1]]
-  params <- params[lapply(params, nchar) > 0]
+  params <- strsplit(params_line, ",|.+?function\\s*\\(|\\s*\\)\\s*\\{")[[1]]
+  params <- params[nchar(params) > 0]
   params <- gsub("^\\s+|\\s+$|=.+", "", params)
   
   # Put together the roxygen fields:

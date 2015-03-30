@@ -1,1 +1,1 @@
-This contains some useful r functions and code snippets.  
+This contains some useful R functions and code snippets.  

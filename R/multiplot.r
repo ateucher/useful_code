@@ -14,6 +14,7 @@
 #' @param  titlefont The font of the title
 #' @param  titleface The font face (1 = normal, 2 = bold, 3 = italic, 4 = bold italic)
 #' @param  titlesize The size of the title font
+#' @param  center Center last row
 #' 
 #' @details If plotting three plots and the layout is something like
 #'   matrix(c(1,2,3,3), nrow=2, byrow=TRUE), then plot 1 will go in the upper
@@ -43,7 +44,7 @@
 #'           titlefont = "Wingdings", titleface = 4, titlesize = 20)
 #'}
 multiplot <- function(..., plotlist=NULL, cols=1, layout=NULL, widths=NULL, heights=NULL, 
-                      title=NULL, titlefont = "", titleface = 1, titlesize = 16) {
+                      title=NULL, titlefont = "", titleface = 1, titlesize = 16, center = TRUE) {
   
   # Make a list from the ... arguments and plotlist
   plots <- c(list(...), plotlist)
@@ -88,7 +89,13 @@ multiplot <- function(..., plotlist=NULL, cols=1, layout=NULL, widths=NULL, heig
   } else {
     # Set up the page
     grid.newpage()
-    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout), 
+    
+    numCols = ncol(layout)
+    numRows = nrow(layout)
+    
+    print(paste(numCols,numRows))
+    
+    pushViewport(viewport(layout = grid.layout(numRows, 2*numCols, 
                                                widths=colwidths, 
                                                heights=rowheights)))
     
@@ -97,17 +104,24 @@ multiplot <- function(..., plotlist=NULL, cols=1, layout=NULL, widths=NULL, heig
       # Get the i,j matrix positions of the regions that contain this subplot
       matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
       
-      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
-                                      layout.pos.col = matchidx$col))
+      layout.pos.row = matchidx$row
+      layout.pos.col = 2*matchidx$col-1
+      
+      if(center & ((numPlots %% numCols) != 0) & (matchidx$row == numRows)){
+        #add offset to elements of last row
+        layout.pos.col = layout.pos.col + numCols - (numPlots %% numCols)
+      }      
+      
+      print(plots[[i]], vp = viewport(layout.pos.row = layout.pos.row,
+                                      layout.pos.col = c(layout.pos.col,layout.pos.col+1)))
     }
     
     if (!is.null(title)) {
-      grid.text(title, vp = viewport(layout.pos.row = 1
-                                     , layout.pos.col = 1:ncol(layout)), 
+      grid.text(title, vp = viewport(layout.pos.row = 1, layout.pos.col = 1:(2*numCols)), 
                 gp = gpar(fontfamily = titlefont, fontface = titleface, 
                           fontsize = titlesize))
     }
     
   }
-return(invisible(NULL))
+  return(invisible(NULL))
 }

@@ -93,7 +93,6 @@ multiplot <- function(..., plotlist=NULL, cols=1, layout=NULL, widths=NULL, heig
     numCols = ncol(layout)
     numRows = nrow(layout)
     
-    print(paste(numCols,numRows))
     
     pushViewport(viewport(layout = grid.layout(numRows, 2*numCols, 
                                                widths=colwidths, 
